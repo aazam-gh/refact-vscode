@@ -79,12 +79,31 @@
             answer_counter += 1;
             const question_div = document.createElement('div');
             question_div.classList.add('refactcss-chat__question');
+            console.log(data.question_html)
             question_div.innerHTML = data.question_html;
             question_div.dataset.raw = data.question_raw;
             question_div.dataset.messages_backup = JSON.stringify(data.messages_backup);
             question_div.dataset.question_backup = data.question_raw;
             message_pair_div.appendChild(question_div);
             last_answer_div = null;
+
+            const retryInput = document.createElement('textarea');
+            retryInput.style.display = 'none'
+            retryInput.type = 'text';
+            retryInput.value = data.question_raw;
+            retryInput.classList.add('refactcss-chat__retryinput');
+            question_div.appendChild(retryInput);
+            const cancelButton = document.createElement('button');
+            cancelButton.style.display = 'none';
+            cancelButton.innerText = 'Cancel';
+            cancelButton.classList.add('refactcss-chat__cancel-button');
+            question_div.appendChild(cancelButton);
+            const submitButton = document.createElement('button');
+            submitButton.style.display = 'none';
+            submitButton.innerText = 'Submit';
+            submitButton.classList.add('refactcss-chat__submit-button');
+            question_div.appendChild(submitButton);
+
             const retry_button = document.createElement('button');
             retry_button.innerText = 'Retry';
             retry_button.classList.add('refactcss-chat__copybutton');
@@ -94,17 +113,8 @@
                     type: "reset-messages",
                     messages_backup: JSON.parse(question_div.dataset.messages_backup)
                 });
-                chat_input.value = question_div.dataset.question_backup;
-                answer_counter = parseInt(message_pair_div.dataset.answer_counter);
-                const chats = document.querySelectorAll('.refactcss-chat__item');
-                for (let i = chats.length - 1; i >= 0; i--) {
-                    const chat = chats[i];
-                    if (parseInt(chat.dataset.answer_counter) >= answer_counter) {
-                        chat.remove();
-                    }
-                }
-                visibility_control(true);
-                chat_input.focus();
+                question_div.focus();
+            
             });
         }
 
